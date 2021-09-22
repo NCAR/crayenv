@@ -1,0 +1,33 @@
+#!/bin/bash
+
+ALLARGS="$@"
+NARGS=$#
+me=$(whoami)
+#logsh=$(getent passwd $me|awk -F: '{print $NF}')
+logsh="/bin/bash"
+shtype=$(echo $logsh|awk -F\/ '{print $NF}'|grep -o '...$')
+shargs="--rcfile /root/.bashenv"
+wd=$(pwd)
+
+CCPREF=/glade/u/apps/ch/opt/charliecloud/2020-10-21/bin
+IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/1.4.1/1.4.1.sb
+source /etc/profile.d/modules.sh
+ml purge
+unset MODULEPATH_ROOT
+unset MODULEPATH
+unset MODULESHOME
+unset -f module
+unset -f ml
+
+if [ ! -z "$PBS_JOBID" ] ; then
+    SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+    ${SCRDIR}/start_slurm.sh
+fi
+
+if [ $NARGS -eq 0 ] ; then
+   $CCPREF/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+    --set-env=${IMAGEROOT}/ch/environment ${IMAGEROOT} -- ${logsh} $shargs
+else
+   $CCPREF/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+    --set-env=${IMAGEROOT}/ch/environment ${IMAGEROOT} -- ${logsh} $shargs -c "$ALLARGS"
+fi
