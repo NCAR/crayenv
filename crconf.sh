@@ -40,8 +40,8 @@ fi
 
 prvkey=${keydir}/private.key
 pubkey=${keydir}/public.key
-openssl genrsa -out ${prvkey} 1024 2>&1 > /dev/null
-openssl rsa -in ${prvkey} -pubout -out ${pubkey} 2>&1 > /dev/null
+openssl genrsa -out ${prvkey} 1024 2> /dev/null
+openssl rsa -in ${prvkey} -pubout -out ${pubkey} 2> /dev/null
 chmod 600 ${prvkey}
 
 slurmctldport=$(( 8192 + $(echo $PBS_JOBID|awk -F\. '{print $1}'|cut -c -4) ))
