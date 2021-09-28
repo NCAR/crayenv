@@ -11,7 +11,7 @@ me=$(whoami)
 BASH="/bin/bash"
 wd=$(pwd)
 
-LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$
+LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
 
 export SCR_CCPREF=${CENV_CCPREF}
