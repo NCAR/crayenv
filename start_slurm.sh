@@ -36,6 +36,9 @@ if [ ! -z "$PBS_JOBID" ] ; then
     do
         shorth=$(echo $host|awk -F. '{print $1}')
         shorthip=$(getent hosts "${shorth}${suff}"|awk '{print $1}')
-        ssh ${shorthip} PBS_JOBID=$PBS_JOBID ${SCRDIR}/start_slurmd.sh
+        ssh -o LogLevel=ERROR ${shorthip} PBS_JOBID=$PBS_JOBID \
+                                          CENV_CCPREF=${CENV_CCPREF} \
+                                          CENV_IMAGEROOT=${CENV_IMAGEROOT} \
+                    ${SCRDIR}/start_slurmd.sh
     done
 fi

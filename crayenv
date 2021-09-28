@@ -21,7 +21,7 @@ unset -f ml
 
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-    ${SCRDIR}/start_slurm.sh
+    ${SCRDIR}/start_slurm.sh < /dev/null
 fi
 
 shargs="--rcfile /root/.bashenv"
