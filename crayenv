@@ -11,8 +11,8 @@ me=$(whoami)
 BASH="/bin/bash"
 wd=$(pwd)
 
-SCR_CCPREF=${CENV_CCPREF}
-SCR_IMAGEROOT=${CENV_IMAGEROOT}
+export SCR_CCPREF=${CENV_CCPREF}
+export SCR_IMAGEROOT=${CENV_IMAGEROOT}
 
 source /etc/profile.d/modules.sh
 ml purge
