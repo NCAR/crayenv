@@ -17,6 +17,13 @@ During subsequent invokation it will use the same SLURM cluster to launch
 the jobs. The SLURM cluster can be queried using usual slurm commands like
 `sinfo`, `scontrol` etc. but the commands need to be invoked within the container.
 
+## Usage Monitoring
+
+Please note that this is a licensed product from HPE-Cray and at this time
+they are allowing us to use it with an implied obligations to provide feedback
+to them. We have agreed to monitor your usage and will provide your email-id to 
+HPE-Cray for the purpose of seeking feedback on use of CPE container.
+
 ## Building Applications
 
 The whole `glade` is bind mounted within the container, so all user directories
