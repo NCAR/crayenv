@@ -15,7 +15,7 @@ if [ ! -z "$PBS_JOBID" ] ; then
     slurmdpid=$(ps -u ${me} -o pid,comm=|awk '$2 == "slurmd"{print $1}')
     if [ -z "${slurmdpid}" ] ; then
        echo "Starting slurmd in node $(hostname -s)... "
-       ${CENV_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
-         --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${SCRDIR}/slurmd.sh $PBS_JOBID
+       ${SCR_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+         --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${SCRDIR}/slurmd.sh $PBS_JOBID
     fi
 fi

@@ -8,9 +8,11 @@ in the script called `crayenv`,  when invoked, it gives a bash shell
 within the container
 
 If invoked within PBS job environment, for the first time it will create
-a small SLURM cluster involving the nodes in the PBS job and start the cluster.
+a small SLURM cluster (within container) involving the nodes in the PBS 
+job and start the cluster.
 During subsequent invokation it will use the same SLURM cluster to launch
-the jobs.
+the jobs. The SLURM cluster can be queried using usual slurm commands like
+sinfo, scontrol etc. but the commands need to be invoked within the container.
 
 ## Building Applications
 
