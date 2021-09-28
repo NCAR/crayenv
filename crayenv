@@ -11,6 +11,9 @@ me=$(whoami)
 BASH="/bin/bash"
 wd=$(pwd)
 
+LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$
+echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
+
 export SCR_CCPREF=${CENV_CCPREF}
 export SCR_IMAGEROOT=${CENV_IMAGEROOT}
 
@@ -36,3 +39,4 @@ else
    ${SCR_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
     --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${BASH} -c "${ALLARGS}"
 fi
+echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
