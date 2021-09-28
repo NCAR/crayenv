@@ -5,7 +5,10 @@ launchable on CISL computing resources. The container is launched
 using Charliecloud framework but singularity may be used with very little
 modifications. The exact commands to launch are wrapped
 in the script called `crayenv`,  when invoked, it gives a bash shell 
-within the container
+within the container. You may check running `module list` or `module available`.
+If you're not familiar with cray environment `ftn`, `cc` and `CC` are
+the Fortran (Cray), C (clang) and C++ (clang) compilers respectively,
+that links with mpi libraries if needed.
 
 If invoked within PBS job environment, for the first time it will create
 a small SLURM cluster (within container) involving the nodes in the PBS 
