@@ -1,8 +1,9 @@
-#Crayenv
+# Crayenv
 
 The `crayenv` is a collection of scripts to make Cray PE conntainer easily
-launchable on  CISL computing resources. The container is launched
-using Charliecloud framework. The exact commands to launch are wrapped
+launchable on CISL computing resources. The container is launched
+using Charliecloud framework but singularity may be used with very little
+modifications. The exact commands to launch are wrapped
 in the script called `crayenv`,  when invoked, it gives a bash shell 
 within the container
 
@@ -11,9 +12,16 @@ a small SLURM cluster involving the nodes in the PBS job and start the cluster.
 During subsequent invokation it will use the same SLURM cluster to launch
 the jobs.
 
+## Building Applications
+
 The whole `glade` is bind mounted within the container, so all user directories
-are available. In batch context there are severaal ways to launch an MPI program
-built within container.
+are available. The default `TCL` module is configured and basic environment is
+loaded to be able to compile or build simple MPI jobs.
+
+## Launching Applications
+
+In batch context there are few different ways to launch an MPI program
+built within the container.
 
 - Interactive context
 In a shell within a batch job invoke `crayenv` to get a shell within the container.
@@ -42,5 +50,5 @@ crayenv << EOF
 srun -n 8 ./a.out
 EOF
 ```
-in this case some pre-processing within the container environment may be
-performed before launching.
+in this way some pre and post processing commands within the container 
+environment may be inserted before and after launching.
