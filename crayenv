@@ -1,16 +1,16 @@
 #!/bin/bash
+#
+# This script expects 2 environment variables
+#   1. CENV_CCPREF    - The location where to pick charlie-cloud launcher ch-run
+#   2. CENV_IMAGEROOT - The root of Image Sandbox for Charlie cloud
+#
 
 ALLARGS="$@"
 NARGS=$#
 me=$(whoami)
-#logsh=$(getent passwd $me|awk -F: '{print $NF}')
-logsh="/bin/bash"
-shtype=$(echo $logsh|awk -F\/ '{print $NF}'|grep -o '...$')
-shargs="--rcfile /root/.bashenv"
+BASH="/bin/bash"
 wd=$(pwd)
 
-CCPREF=/glade/u/apps/ch/opt/charliecloud/2020-10-21/bin
-IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/1.4.1/1.4.1.sb
 source /etc/profile.d/modules.sh
 ml purge
 unset MODULEPATH_ROOT
@@ -25,9 +25,9 @@ if [ ! -z "$PBS_JOBID" ] ; then
 fi
 
 if [ $NARGS -eq 0 ] ; then
-   $CCPREF/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
-    --set-env=${IMAGEROOT}/ch/environment ${IMAGEROOT} -- ${logsh} $shargs
+   ${CENV_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+    --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${BASH}
 else
-   $CCPREF/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
-    --set-env=${IMAGEROOT}/ch/environment ${IMAGEROOT} -- ${logsh} $shargs -c "$ALLARGS"
+   ${CENV_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+    --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${BASH} -c "${ALLARGS}"
 fi
