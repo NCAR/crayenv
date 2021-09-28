@@ -12,7 +12,7 @@ a small SLURM cluster (within container) involving the nodes in the PBS
 job and start the cluster.
 During subsequent invokation it will use the same SLURM cluster to launch
 the jobs. The SLURM cluster can be queried using usual slurm commands like
-sinfo, scontrol etc. but the commands need to be invoked within the container.
+`sinfo`, `scontrol` etc. but the commands need to be invoked within the container.
 
 ## Building Applications
 
