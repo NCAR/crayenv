@@ -24,9 +24,11 @@ if [ ! -z "$PBS_JOBID" ] ; then
     ${SCRDIR}/start_slurm.sh
 fi
 
+shargs="--rcfile /root/.bashenv"
+
 if [ $NARGS -eq 0 ] ; then
    ${CENV_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
-    --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${BASH}
+    --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${BASH} ${shargs}
 else
    ${CENV_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
     --set-env=${CENV_IMAGEROOT}/ch/environment ${CENV_IMAGEROOT} -- ${BASH} -c "${ALLARGS}"
