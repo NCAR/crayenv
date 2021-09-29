@@ -10,6 +10,7 @@ NARGS=$#
 me=$(whoami)
 BASH="/bin/bash"
 wd=$(pwd)
+SCRATCH="/glade/scratch/${me}"
 
 LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
@@ -33,10 +34,10 @@ fi
 shargs="--rcfile /root/.bashenv"
 
 if [ $NARGS -eq 0 ] ; then
-   ${SCR_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+   ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
     --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${BASH} ${shargs}
 else
-   ${SCR_CCPREF}/ch-run -b/glade:/glade -b/tmp:/tmp --cd=${wd} \
+   ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
     --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${BASH} -c "${ALLARGS}"
 fi
 echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
