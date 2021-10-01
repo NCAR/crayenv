@@ -4,7 +4,7 @@ SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 me=$(whoami)
 source ${SCRDIR}/slurmenv.bash
-spooldir="/slurm/d"
+spooldir="/tmp/d"
 stateloc="${SLURM_PREF}/var/spool/slurm/ctld"
 logdir="${SLURM_PREF}/var/log/"
 confdir=$( dirname ${SLURM_CONF} )

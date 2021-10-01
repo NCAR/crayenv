@@ -10,7 +10,6 @@ NARGS=$#
 me=$(whoami)
 BASH="/bin/bash"
 wd=$(pwd)
-SCRATCH="/glade/scratch/${me}"
 
 LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
@@ -27,8 +26,14 @@ unset -f module
 unset -f ml
 
 if [ ! -z "$PBS_JOBID" ] ; then
+    SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
+    if [ ! -d ${SCRATCH} ] ; then
+       mkdir -p ${SCRATCH}/d
+    fi
     SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
     ${SCRDIR}/start_slurm.sh < /dev/null
+else
+    SCRATCH=/glade/scratch/${me}
 fi
 
 shargs="--rcfile /root/.bashenv"

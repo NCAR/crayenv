@@ -13,7 +13,7 @@ unset -f ml
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
     if [ ! -d ${SCRATCH} ] ; then
-        mkdir -p ${SCRATCH}
+        mkdir -p ${SCRATCH}/d
     fi
     SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
     source ${SCRDIR}/slurmenv.bash
@@ -25,6 +25,7 @@ if [ ! -z "$PBS_JOBID" ] ; then
     fi
     slurmctldpid=$(ps -u ${me} -o pid,comm=|awk '$2 == "slurmctld"{print $1}')
     if [ -z "${slurmctldpid}" ] ; then
+       rm -f ${SCRATCH}/*.pid ${SCRATCH}/d/*
        echo "Starting slurmctld ..."
        ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
          --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${SCRDIR}/slurmctld.sh
