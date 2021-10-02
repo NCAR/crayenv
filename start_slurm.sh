@@ -1,14 +1,6 @@
 #!/bin/bash
 
 me=$(whoami)
-wd=$(pwd)
-source /etc/profile.d/modules.sh
-ml purge
-unset MODULEPATH_ROOT
-unset MODULEPATH
-unset MODULESHOME
-unset -f module
-unset -f ml
 
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
@@ -27,8 +19,15 @@ if [ ! -z "$PBS_JOBID" ] ; then
     if [ -z "${slurmctldpid}" ] ; then
        rm -f ${SCRATCH}/*.pid ${SCRATCH}/d/*
        echo "Starting slurmctld ..."
-       ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
-         --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${SCRDIR}/slurmctld.sh
+       source /etc/profile.d/modules.sh
+       ml purge
+       unset MODULEPATH_ROOT
+       unset MODULEPATH
+       unset MODULESHOME
+       unset -f module
+       unset -f ml
+       ${SINGULARITY} run -u -B/glade,${SCRATCH}:/tmp --env-file ${STARTUPENV} \
+              ${SCR_IMAGEROOT} /bin/bash -c ${SCRDIR}/slurmctld.sh
     else
        echo "found slurmctld running.."
     fi
@@ -43,8 +42,10 @@ if [ ! -z "$PBS_JOBID" ] ; then
         shorth=$(echo $host|awk -F. '{print $1}')
         shorthip=$(getent hosts "${shorth}${suff}"|awk '{print $1}')
         ssh -o LogLevel=ERROR ${shorthip} PBS_JOBID=$PBS_JOBID \
-                                          SCR_CCPREF=${SCR_CCPREF} \
+                                          SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
+                                          SCRATCH=${SCRATCH} \
+                                          STARTUPENV=${STARTUPENV} \
                     ${SCRDIR}/start_slurmd.sh
     done
 fi

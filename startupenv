@@ -1,0 +1,4 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/glade/u/apps/ch/opt/hpe-cpe/1.4.1/slurm/21.08.0/bin:/glade/u/apps/ch/opt/hpe-cpe/1.4.1/slurm/21.08.0/sbin
+MODULEPATH=/opt/cray/pe/perftools/20.12.0.2/modulefiles:/usr/local/Modules/modulefiles:/opt/cray/pe/cpe-prgenv/7.0.0/modules:/opt/cray/pe/modulefiles:/opt/cray/pe/craype-targets/1.4.0/modulefiles:/opt/modulefiles:/opt/cray/modulefiles:/opt/cray/pe/craype/2.7.9/modulefiles:/opt/spack/share/spack/modules
+TZ='America/Denver'
+PS1="Cenv \h:\W> "
