@@ -44,7 +44,6 @@ if [ ! -z "$PBS_JOBID" ] ; then
         ssh -o LogLevel=ERROR ${shorthip} PBS_JOBID=$PBS_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
-                                          SCRATCH=${SCRATCH} \
                                           STARTUPENV=${STARTUPENV} \
                     ${SCRDIR}/start_slurmd.sh
     done

@@ -12,6 +12,8 @@ BASH="/bin/bash"
 LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
 
+source /etc/profile.d/modules.sh
+ml singularity
 SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 export SINGULARITY=$(which singularity)
 export SCR_IMAGEROOT=${SENV_IMAGEROOT}
@@ -32,7 +34,6 @@ fi
 
 shargs="--rcfile ${STARTUPRC}"
 
-source /etc/profile.d/modules.sh
 ml purge
 unset MODULEPATH_ROOT
 unset MODULEPATH

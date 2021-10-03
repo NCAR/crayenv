@@ -5,6 +5,10 @@ me=$(whoami)
 if [ ! -z "$PBS_JOBID" ] ; then
     slurmdpid=$(ps -u ${me} -o pid,comm=|awk '$2 == "slurmd"{print $1}')
     if [ -z "${slurmdpid}" ] ; then
+       SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
+       if [ ! -d ${SCRATCH} ] ; then
+           mkdir -p ${SCRATCH}/d
+       fi
        rm -f ${SCRATCH}/slurmd.pid ${SCRATCH}/d/*
        echo "Starting slurmd in node $(hostname -s)... "
        SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
