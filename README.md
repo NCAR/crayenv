@@ -2,15 +2,16 @@
 
 The `crayenv` is a collection of scripts to make Cray PE conntainer easily
 launchable on CISL computing resources. The container is launched
-using Charliecloud framework but singularity may be used with very little
-modifications. The exact commands to launch are wrapped
+using singularity container runtime.
+The exact commands to launch are wrapped
 in the script called `crayenv`,  when invoked, it gives a bash shell 
 within the container. You may check running `module list` or `module available`.
 If you're not familiar with cray environment `ftn`, `cc` and `CC` are
 the Fortran (Cray), C (clang) and C++ (clang) compilers respectively,
 that links with mpi libraries if needed.
 
-If invoked within PBS job environment, for the first time it will create
+If invoked within PBS job environment, for the first time (in a batch
+job) it will create
 a small SLURM cluster (within container) involving the nodes in the PBS 
 job and start the cluster.
 During subsequent invokation it will use the same SLURM cluster to launch
@@ -28,15 +29,21 @@ HPE-Cray for the purpose of seeking feedback on use of CPE container.
 
 The whole `glade` is bind mounted within the container, so all user directories
 are available. The default `TCL` module is configured and basic environment is
-loaded to be able to compile or build simple MPI jobs.
+loaded to be able to compile or build simple MPI jobs. Once in the container
+environment, The building application could be as simple as 
+`cd <application-directory>` and `make` etc. 
 
 ## Launching Applications
 
 In batch context there are few different ways to launch an MPI program
 built within the container.
 
-- Interactive context
-In a shell within a batch job invoke `crayenv` to get a shell within the container.
+- Batch interactive context
+Suppose you invoke a batch interactive shell using commands like:
+```
+qsub -I -l select=2:ncpus=36:mpiprocs=36:ompthreads=1 -l walltime=02:00:00 -q premium -A SCSG0001
+```
+then in the shell prompt invoke `crayenv` to get a shell within the container.
 Then invoke `srun` as needed e.g.
 ```
 srun -n <number-of-tasks> ./a.out
