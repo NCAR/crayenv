@@ -41,7 +41,7 @@ if [ ! -z "$PBS_JOBID" ] ; then
     do
         shorth=$(echo $host|awk -F. '{print $1}')
         shorthip=$(getent hosts "${shorth}${suff}"|awk '{print $1}')
-        ssh -o LogLevel=ERROR ${shorthip} PBS_JOBID=$PBS_JOBID \
+        ssh -o LogLevel=ERROR ${shorthip} env PBS_JOBID=$PBS_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
                                           STARTUPENV=${STARTUPENV} \
