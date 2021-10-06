@@ -7,7 +7,7 @@
 ALLARGS="$@"
 NARGS=$#
 me=$(whoami)
-BASH="/bin/bash"
+THESHELL="/bin/bash"
 
 LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
@@ -43,9 +43,9 @@ unset -f ml
 
 if [ $NARGS -eq 0 ] ; then
    ${SINGULARITY} run -u -B/glade,${SCRATCH}:/tmp --env-file ${STARTUPENV} \
-              ${SCR_IMAGEROOT} ${BASH} ${shargs}
+              ${SCR_IMAGEROOT} ${THESHELL} ${shargs}
 else
    ${SINGULARITY} run -u -B/glade,${SCRATCH}:/tmp --env-file ${STARTUPENV} \
-              ${SCR_IMAGEROOT} ${BASH} -c "${ALLARGS}"
+              ${SCR_IMAGEROOT} ${THESHELL} -c "${ALLARGS}"
 fi
 echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
