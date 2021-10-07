@@ -21,7 +21,7 @@ export SINGULARITYENV_OMP_NUM_THREADS=$OMP_NUM_THREADS
 export STARTUPENV=${SCRDIR}/startupenv
 export STARTUPRC=${SCRDIR}/bashenv
 export SINGULARITYENV_BASH_ENV=$STARTUPRC
-export TERM=xterm
+export TERM=vt100
 
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
