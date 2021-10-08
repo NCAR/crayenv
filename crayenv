@@ -1,23 +1,40 @@
 #!/bin/bash
 #
-# This script expects 2 environment variables
-#   1. CENV_CCPREF    - The location where to pick charlie-cloud launcher ch-run
-#   2. CENV_IMAGEROOT - The root of Image Sandbox for Charlie cloud
+# This script expects 1 environment variable
+#   1. SENV_IMAGEROOT - The root of Image Sandbox for Singularity
 #
 
 ALLARGS="$@"
 NARGS=$#
 me=$(whoami)
-BASH="/bin/bash"
-wd=$(pwd)
+THESHELL="/bin/bash"
 
 LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
 echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
 
-export SCR_CCPREF=${CENV_CCPREF}
-export SCR_IMAGEROOT=${CENV_IMAGEROOT}
-
 source /etc/profile.d/modules.sh
+ml singularity
+SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+export SINGULARITY=$(which singularity)
+export SCR_IMAGEROOT=${SENV_IMAGEROOT}
+export SINGULARITYENV_OMP_NUM_THREADS=$OMP_NUM_THREADS
+export STARTUPENV=${SCRDIR}/startupenv
+export STARTUPRC=${SCRDIR}/bashenv
+export SINGULARITYENV_BASH_ENV=$STARTUPRC
+export TERM=vt100
+
+if [ ! -z "$PBS_JOBID" ] ; then
+    SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
+    if [ ! -d ${SCRATCH} ] ; then
+       mkdir -p ${SCRATCH}/d
+    fi
+    ${SCRDIR}/start_slurm.sh < /dev/null
+else
+    SCRATCH=/glade/scratch/${me}
+fi
+
+shargs="--rcfile ${STARTUPRC}"
+
 ml purge
 unset MODULEPATH_ROOT
 unset MODULEPATH
@@ -25,24 +42,11 @@ unset MODULESHOME
 unset -f module
 unset -f ml
 
-if [ ! -z "$PBS_JOBID" ] ; then
-    SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
-    if [ ! -d ${SCRATCH} ] ; then
-       mkdir -p ${SCRATCH}/d
-    fi
-    SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-    ${SCRDIR}/start_slurm.sh < /dev/null
-else
-    SCRATCH=/glade/scratch/${me}
-fi
-
-shargs="--rcfile /root/.bashenv"
-
 if [ $NARGS -eq 0 ] ; then
-   ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
-    --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${BASH} ${shargs}
+   ${SINGULARITY} run -u -B/glade,${SCRATCH}:/tmp --env-file ${STARTUPENV} \
+              ${SCR_IMAGEROOT} ${THESHELL} ${shargs}
 else
-   ${SCR_CCPREF}/ch-run -b/glade:/glade -b${SCRATCH}:/tmp --cd=${wd} \
-    --set-env=${SCR_IMAGEROOT}/ch/environment ${SCR_IMAGEROOT} -- ${BASH} -c "${ALLARGS}"
+   ${SINGULARITY} run -u -B/glade,${SCRATCH}:/tmp --env-file ${STARTUPENV} \
+              ${SCR_IMAGEROOT} ${THESHELL} -c "${ALLARGS}"
 fi
 echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
