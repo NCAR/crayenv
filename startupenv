@@ -1,0 +1,3 @@
+PATH=$PATH:/glade/u/apps/ch/opt/hpe-cpe/21.09/slurm/21.09/bin:/glade/u/apps/ch/opt/hpe-cpe/21.09/slurm/21.08.0/sbin
+TZ='America/Denver'
+PS1="CPE@\h:\W> "
