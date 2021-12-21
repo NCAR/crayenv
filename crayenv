@@ -6,7 +6,7 @@
 # -- Need to get rid of this in production
 export SENV_IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/21.09/cray_hpe_cpe_21.09-101921
 
-ALLARGS="$@"
+ALLARGS=" $@ "
 NARGS=$#
 me=$(whoami)
 THESHELL="/bin/bash"
@@ -25,6 +25,12 @@ export STARTUPRC=${SCRDIR}/bashenv
 export SINGULARITYENV_BASH_ENV=$STARTUPRC
 export TERM=vt100
 BINDARGS="-B/glade,/var/spool/pbs,${SCRATCH}:/tmp,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
+
+if [ -n "$CRAYENV_GPU_SUPPORT" ]; then
+    GPUARGS="--nv --env CRAY_FTN_OPTIONS=-L/.singularity.d/libs"
+else
+    GPUARGS=
+fi
 
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
@@ -46,10 +52,10 @@ unset -f module
 unset -f ml
 
 if [ $NARGS -eq 0 ] ; then
-   ${SINGULARITY} run -u ${BINDARGS} --env-file ${STARTUPENV} \
+   ${SINGULARITY} run -u ${BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
               ${SCR_IMAGEROOT} ${THESHELL} ${shargs}
 else
-   ${SINGULARITY} run -u ${BINDARGS} --env-file ${STARTUPENV} \
+   ${SINGULARITY} run -u ${BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
               ${SCR_IMAGEROOT} ${THESHELL} -c "${ALLARGS}"
 fi
 echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
