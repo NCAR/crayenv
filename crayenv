@@ -24,7 +24,6 @@ export STARTUPENV=${SCRDIR}/startupenv
 export STARTUPRC=${SCRDIR}/bashenv
 export SINGULARITYENV_BASH_ENV=$STARTUPRC
 export TERM=vt100
-BINDARGS="-B/glade,/var/spool/pbs,${SCRATCH}:/tmp,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
 
 if [ -n "$CRAYENV_GPU_SUPPORT" ]; then
     GPUARGS="--nv --env CRAY_FTN_OPTIONS=-L/.singularity.d/libs"
@@ -33,14 +32,18 @@ else
 fi
 
 if [ ! -z "$PBS_JOBID" ] ; then
-    SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
-    if [ ! -d ${SCRATCH} ] ; then
-       mkdir -p ${SCRATCH}/d
+#   SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
+    DEB_SCRATCH=/glade/scratch/${me}/.palsd/${PBS_JOBID}/var/tmp/$(hostname -s)
+    if [ ! -d ${DEB_SCRATCH} ] ; then
+       mkdir -p ${DEB_SCRATCH}
     fi
-    ${SCRDIR}/start_slurm.sh < /dev/null
+#   ${SCRDIR}/start_slurm.sh < /dev/null
+    export DEB_SCRATCH
+    ${SCRDIR}/start_palsdaemons.sh < /dev/null
 else
-    SCRATCH=/glade/scratch/${me}
+    DEB_SCRATCH=/glade/scratch/${me}
 fi
+BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,${DEB_SCRATCH}:/tmp,${DEB_SCRATCH}:/var/run/palsd,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
 
 shargs="--rcfile ${STARTUPRC}"
 
