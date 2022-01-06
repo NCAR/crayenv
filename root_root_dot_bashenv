@@ -1,7 +1,7 @@
 
 source /usr/local/Modules/init/bash
 
-module load cpe-cray cce craype craype-network-ofi cray-mpich cray-libsci 1>/dev/null 2>&1
+module load cpe-cray cce craype craype-network-ofi cray-mpich cray-libsci cray-pals 1>/dev/null 2>&1
 
 model=$(lscpu |awk '$1 == "Model" && $2 == "name:"{print $6}')
 if [ $model == "E5-2697" ] ; then
