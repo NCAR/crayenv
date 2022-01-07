@@ -25,7 +25,7 @@ if [ ! -z "$PBS_JOBID" ] ; then
        unset MODULESHOME
        unset -f module
        unset -f ml
-       nohup ${SINGULARITY} run -u -B/glade,${SCRATCH}/tmp:/tmp,${SCRATCH}/palsd:/var/run/palsd,${PALSETC}:/etc/pals \
-           --env-file ${STARTUPENV} ${SCR_IMAGEROOT} /bin/bash -c ${SCRDIR}/palsd.sh > /dev/null 2>&1 < /dev/null &
+       ${SINGULARITY} run -u -B/glade,${SCRATCH}/tmp:/tmp,${SCRATCH}/palsd:/var/run/palsd,${PALSETC}:/etc/pals \
+           --env-file ${STARTUPENV} ${SCR_IMAGEROOT} /bin/bash -c ${SCRDIR}/pals_keys_in_cont.sh > /dev/null 2>&1
     fi
 fi

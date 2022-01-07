@@ -1,6 +1,7 @@
 #!/bin/bash
 
 me=$(whoami)
+export HOST
 
 if [ ! -z "$PBS_JOBID" ] ; then
     SCRATCH=/glade/scratch/${me}/.palsd/${PBS_JOBID}/var/tmp/$(hostname -s)
@@ -13,10 +14,25 @@ if [ ! -z "$PBS_JOBID" ] ; then
     else
         suff="-ib"
     fi
+    hostlist=""
     for host in $(cat ${PBS_NODEFILE}|uniq)
     do
         shorth=$(echo $host|awk -F. '{print $1}')
+        hostlist="${hostlist} ${shorth}"
+    done
+    H=1
+    for shorth in ${hostlist}
+    do
         shorthip=$(getent hosts "${shorth}${suff}"|awk '{print $1}')
+        if [ $H -eq 1 ] ; then
+            ssh -o LogLevel=ERROR ${shorthip} env PBS_JOBID=$PBS_JOBID \
+                                          SINGULARITY=${SINGULARITY} \
+                                          SCR_IMAGEROOT=${SCR_IMAGEROOT} \
+                                          DEB_SCRATCH=${DEB_SCRATCH} \
+                                          STARTUPENV=${STARTUPENV} \
+                    ${SCRDIR}/create_pals_keys.sh
+            H=0
+        fi
         ssh -o LogLevel=ERROR ${shorthip} env PBS_JOBID=$PBS_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \

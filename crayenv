@@ -31,9 +31,12 @@ else
     GPUARGS=
 fi
 
+BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
 if [ ! -z "$PBS_JOBID" ] ; then
 #   SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
     DEB_SCRATCH=/glade/scratch/${me}/.palsd/${PBS_JOBID}/var/tmp/$(hostname -s)
+    PALSETC=/glade/scratch/${me}/.palsd/${PBS_JOBID}/etc
+    BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp,${DEB_SCRATCH}:/var/run/palsd,${PALSETC}:/etc/pals"
     if [ ! -d ${DEB_SCRATCH} ] ; then
        mkdir -p ${DEB_SCRATCH}
     fi
@@ -42,8 +45,8 @@ if [ ! -z "$PBS_JOBID" ] ; then
     ${SCRDIR}/start_palsdaemons.sh < /dev/null
 else
     DEB_SCRATCH=/glade/scratch/${me}
+    BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp"
 fi
-BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,${DEB_SCRATCH}:/tmp,${DEB_SCRATCH}:/var/run/palsd,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
 
 shargs="--rcfile ${STARTUPRC}"
 
