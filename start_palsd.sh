@@ -1,12 +1,15 @@
 #!/bin/bash
 
+export PALSD_LOGFILE PALSD_DEBUG PALSD_RUN_DIR PALSD_PORT PALS_PORT RFE_811452_DISABLE
+#export PALSD_LOGFILE PALSD_DEBUG PALSD_RUN_DIR RFE_811452_DISABLE
+
 me=$(whoami)
 
-if [ ! -z "$PBS_JOBID" ] ; then
+if [ ! -z "$JUST_JOBID" ] ; then
     palsdpid=$(ps -u ${me} -o pid,comm=|awk '$2 == "palsd"{print $1}')
     if [ -z "${palsdpid}" ] ; then
-       SCRATCH=/glade/scratch/${me}/.palsd/${PBS_JOBID}/var/$(hostname -s)
-       PALSETC=/glade/scratch/${me}/.palsd/${PBS_JOBID}/etc
+       SCRATCH=/glade/scratch/${me}/.palsd/${JUST_JOBID}/var/$(hostname -s)
+       PALSETC=/glade/scratch/${me}/.palsd/${JUST_JOBID}/etc
        if [ ! -d ${SCRATCH}/tmp ] ; then
            mkdir -p ${SCRATCH}/tmp
        fi

@@ -1,10 +1,11 @@
 #!/bin/bash
 
+
 me=$(whoami)
 export HOST
 
-if [ ! -z "$PBS_JOBID" ] ; then
-    SCRATCH=/glade/scratch/${me}/.palsd/${PBS_JOBID}/var/tmp/$(hostname -s)
+if [ ! -z "$JUST_JOBID" ] ; then
+    SCRATCH=/glade/scratch/${me}/.palsd/${JUST_JOBID}/var/tmp/$(hostname -s)
     if [ ! -d ${SCRATCH} ] ; then
         mkdir -p ${SCRATCH}
     fi
@@ -25,19 +26,31 @@ if [ ! -z "$PBS_JOBID" ] ; then
     do
         shorthip=$(getent hosts "${shorth}${suff}"|awk '{print $1}')
         if [ $H -eq 1 ] ; then
-            ssh -o LogLevel=ERROR ${shorthip} env PBS_JOBID=$PBS_JOBID \
+            ssh -o LogLevel=ERROR ${shorthip} env JUST_JOBID=$JUST_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
                                           DEB_SCRATCH=${DEB_SCRATCH} \
                                           STARTUPENV=${STARTUPENV} \
+                                          PALSD_LOGFILE=${PALSD_LOGFILE} \
+                                          PALSD_DEBUG=${PALSD_DEBUG} \
+                                          PALSD_RUN_DIR=${PALSD_RUN_DIR} \
+                                          PALSD_PORT=${PALSD_PORT} \
+                                          PALS_PORT=${PALS_PORT} \
+                                          RFE_811452_DISABLE=${RFE_811452_DISABLE} \
                     ${SCRDIR}/create_pals_keys.sh
             H=0
         fi
-        ssh -o LogLevel=ERROR ${shorthip} env PBS_JOBID=$PBS_JOBID \
+        ssh -o LogLevel=ERROR ${shorthip} env JUST_JOBID=$JUST_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
                                           DEB_SCRATCH=${DEB_SCRATCH} \
                                           STARTUPENV=${STARTUPENV} \
+                                          PALSD_LOGFILE=${PALSD_LOGFILE} \
+                                          PALSD_DEBUG=${PALSD_DEBUG} \
+                                          PALSD_RUN_DIR=${PALSD_RUN_DIR} \
+                                          RFE_811452_DISABLE=${RFE_811452_DISABLE} \
+                                          PALSD_PORT=${PALSD_PORT} \
+                                          PALS_PORT=${PALS_PORT} \
                     ${SCRDIR}/start_palsd.sh
     done
 fi
