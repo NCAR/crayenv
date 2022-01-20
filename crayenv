@@ -52,10 +52,6 @@ if [ ! -z "$PBS_JOBID" ] ; then
     PALSPORT=$(( 7919 + $(( $JUST_JOBID % 8192 ))))
     export PALSD_PORT=${PALSPORT}
     export PALS_PORT=${PALSPORT}
-#   export PALSD_PORT=7919
-#   export PALS_PORT=7919
-    export PALSD_PORT=7918
-    export PALS_PORT=7918
     export RFE_811452_DISABLE=1
     ${SCRDIR}/start_palsdaemons.sh < /dev/null
 else
