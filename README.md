@@ -2,9 +2,30 @@
 
 ## Building from CPE image provided by Cray-HPE
 
+Following steps are needed
+1. Docker to singularity sandbox conversion
 ```
 singularity build --sandbox cray_hpe_cpe_22.02-021622 docker-archive://cray_hpe_cpe_22.02-021622.tgz
 ```
+2. Copy license file
+```
+cd cray_hpe_cpe_22.02-021622/opt/cray/pe/craype/default/AutoPass
+rmdir Data
+ln -s /tmp data
+cd Lic
+cp <lic-file> CPE-licfile.dat
+```
+3. Install palsd rpm
+```
+cd cray_hpe_cpe_22.02-021622
+rpm2cpio ../cray-palsd-1.0.17-20210813152058.a5a48d5.x86_64.rpm | cpio -idv
+```
+4. Copy all the scripts from older installation
+```
+cp -p -r ../older/bin bin
+```
+5. Edit the **crayenv** file to change  SENV_IMAGEROOT to point to new image
+
 
 The `crayenv` is a collection of scripts to make Cray PE conntainer easily
 launchable on CISL computing resources. The container is launched

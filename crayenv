@@ -4,7 +4,7 @@
 #   1. SENV_IMAGEROOT - The root of Image Sandbox for Singularity
 #
 # -- Need to get rid of this in production
-export SENV_IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/21.09/cray_hpe_cpe_21.09-101921
+export SENV_IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/22.02/cray_hpe_cpe_22.02-021622
 
 ALLARGS=" $@ "
 NARGS=$#
