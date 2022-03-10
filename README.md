@@ -1,5 +1,11 @@
 # Crayenv
 
+## Building from CPE image provided by Cray-HPE
+
+```
+singularity build --sandbox cray_hpe_cpe_22.02-021622 docker-archive://cray_hpe_cpe_22.02-021622.tgz
+```
+
 The `crayenv` is a collection of scripts to make Cray PE conntainer easily
 launchable on CISL computing resources. The container is launched
 using Charliecloud framework but singularity may be used with very little
