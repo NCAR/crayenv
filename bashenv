@@ -8,6 +8,7 @@ if [ $model == "E5-2697" ] ; then
    module load craype-broadwell 1>/dev/null 2>&1
 fi
 module load cce craype craype-network-ofi cray-mpich cray-libsci cray-pals
+export PATH=/usr/ncar/bin:$PATH
 
 if [ ! -z "${PBS_JOBID}" -a -z "${SLURM_PREF}" ] ; then
    me=$(whoami)
