@@ -1,5 +1,5 @@
 
-source /opt/cray/pe/modules/3.2.11.5/init/bash
+source /opt/cray/pe/modules/default/init/bash
 export MODULEPATH=$MODULEPATH:/opt/cray/pe/craype/2.7.9/modulefiles
 
 model=$(lscpu |awk '$1 == "Model" && $2 == "name:"{print $6}')

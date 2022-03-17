@@ -31,7 +31,7 @@ else
     GPUARGS=
 fi
 
-BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk"
+BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar"
 if [ ! -z "$PBS_JOBID" ] ; then
     export JUST_JOBID=$(echo $PBS_JOBID|awk -F\. '{print $1}')
 #   SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
