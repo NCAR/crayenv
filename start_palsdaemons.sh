@@ -5,10 +5,6 @@ me=$(whoami)
 export HOST
 
 if [ ! -z "$JUST_JOBID" ] ; then
-    SCRATCH=/glade/scratch/${me}/.palsd/${JUST_JOBID}/var/tmp/$(hostname -s)
-    if [ ! -d ${SCRATCH} ] ; then
-        mkdir -p ${SCRATCH}
-    fi
     SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
     if [ $(hostname -s| awk '$1 ~ /^r/') ] ; then
         suff=""
@@ -29,7 +25,7 @@ if [ ! -z "$JUST_JOBID" ] ; then
             ssh -o LogLevel=ERROR ${shorthip} env JUST_JOBID=$JUST_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
-                                          DEB_SCRATCH=${DEB_SCRATCH} \
+                                          BINDARGS=${BINDARGS} \
                                           STARTUPENV=${STARTUPENV} \
                                           PALSD_LOGFILE=${PALSD_LOGFILE} \
                                           PALSD_DEBUG=${PALSD_DEBUG} \
@@ -43,7 +39,7 @@ if [ ! -z "$JUST_JOBID" ] ; then
         ssh -o LogLevel=ERROR ${shorthip} env JUST_JOBID=$JUST_JOBID \
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
-                                          DEB_SCRATCH=${DEB_SCRATCH} \
+                                          BINDARGS=${BINDARGS} \
                                           STARTUPENV=${STARTUPENV} \
                                           PALSD_LOGFILE=${PALSD_LOGFILE} \
                                           PALSD_DEBUG=${PALSD_DEBUG} \

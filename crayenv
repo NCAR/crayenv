@@ -31,19 +31,18 @@ else
     GPUARGS=
 fi
 
-BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar"
+export BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar"
 if [ ! -z "$PBS_JOBID" ] ; then
     export JUST_JOBID=$(echo $PBS_JOBID|awk -F\. '{print $1}')
-#   SCRATCH=/glade/scratch/${me}/.slurm/${PBS_JOBID}/var/tmp/$(hostname -s)
     DEB_SCRATCH=/glade/scratch/${me}/.palsd/${JUST_JOBID}/var/tmp/$(hostname -s)
     PALSETC=/glade/scratch/${me}/.palsd/${JUST_JOBID}/etc
     if [ ! -d ${PALSETC} ] ; then
        mkdir -p ${PALSETC}
     fi
-    BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp,${DEB_SCRATCH}:/var/run/palsd,${PALSETC}:/etc/pals"
     if [ ! -d ${DEB_SCRATCH} ] ; then
        mkdir -p ${DEB_SCRATCH}
     fi
+    LOC_BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp,${DEB_SCRATCH}:/var/run/palsd,${PALSETC}:/etc/pals"
 #   ${SCRDIR}/start_slurm.sh < /dev/null
     export DEB_SCRATCH
     export PALSD_LOGFILE="/tmp/palsd.log"
@@ -57,7 +56,7 @@ if [ ! -z "$PBS_JOBID" ] ; then
     ${SCRDIR}/start_palsdaemons.sh < /dev/null
 else
     DEB_SCRATCH=/glade/scratch/${me}
-    BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp"
+    LOC_BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp"
 fi
 
 shargs="--rcfile ${STARTUPRC}"
@@ -70,10 +69,10 @@ unset -f module
 unset -f ml
 
 if [ $NARGS -eq 0 ] ; then
-   ${SINGULARITY} run -u ${BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
+   ${SINGULARITY} run -u ${LOC_BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
               ${SCR_IMAGEROOT} ${THESHELL} ${shargs}
 else
-   ${SINGULARITY} run -u ${BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
+   ${SINGULARITY} run -u ${LOC_BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
               ${SCR_IMAGEROOT} ${THESHELL} -c "${ALLARGS}"
 fi
 echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
