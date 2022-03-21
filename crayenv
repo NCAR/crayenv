@@ -26,9 +26,9 @@ export SINGULARITYENV_BASH_ENV=$STARTUPRC
 export TERM=vt100
 
 if [ -n "$CRAYENV_GPU_SUPPORT" ]; then
-    GPUARGS="--nv --env CRAY_FTN_OPTIONS=-L/.singularity.d/libs"
+    export GPUARGS="--nv --env CRAY_FTN_OPTIONS=-L/.singularity.d/libs"
 else
-    GPUARGS=
+    export GPUARGS=
 fi
 
 export BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar"

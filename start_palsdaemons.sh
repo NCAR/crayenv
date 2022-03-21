@@ -26,6 +26,7 @@ if [ ! -z "$JUST_JOBID" ] ; then
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
                                           BINDARGS=${BINDARGS} \
+                                          GPUARGS=${GPU_ARGS} \
                                           STARTUPENV=${STARTUPENV} \
                                           PALSD_LOGFILE=${PALSD_LOGFILE} \
                                           PALSD_DEBUG=${PALSD_DEBUG} \
@@ -40,6 +41,7 @@ if [ ! -z "$JUST_JOBID" ] ; then
                                           SINGULARITY=${SINGULARITY} \
                                           SCR_IMAGEROOT=${SCR_IMAGEROOT} \
                                           BINDARGS=${BINDARGS} \
+                                          GPUARGS=${GPU_ARGS} \
                                           STARTUPENV=${STARTUPENV} \
                                           PALSD_LOGFILE=${PALSD_LOGFILE} \
                                           PALSD_DEBUG=${PALSD_DEBUG} \

@@ -26,7 +26,7 @@ if [ ! -z "$JUST_JOBID" ] ; then
        unset MODULESHOME
        unset -f module
        unset -f ml
-       nohup ${SINGULARITY} run -u ${LOC_BINDARGS} \
+       nohup ${SINGULARITY} run -u ${LOC_BINDARGS} ${GPUARGS} \
            --env-file ${STARTUPENV} ${SCR_IMAGEROOT} /bin/bash -c ${SCRDIR}/palsd.sh > /dev/null 2>&1 < /dev/null &
     fi
 fi
