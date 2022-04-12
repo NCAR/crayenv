@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# This script expects 1 environment variable
+#   1. SENV_IMAGEROOT - The root of Image Sandbox for Singularity
+#
+# -- Need to get rid of this in production
+export SENV_IMAGEROOT=/glade/u/apps/ch/opt/hpe-cpe/22.02/cray_hpe_cpe_22.02-021622_4csg
+
+ALLARGS=" $@ "
+NARGS=$#
+me=$(whoami)
+THESHELL="/bin/bash"
+
+LOGFIL="/glade/scratch/csgteam/logs/cpe/${me}.$(hostname -s).$$"
+echo "Started: $(date +'%Y-%m-%dT%H:%M:%S')" > ${LOGFIL}
+
+source /etc/profile.d/modules.sh
+ml singularity
+SCRDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+export SINGULARITY=$(which singularity)
+export SCR_IMAGEROOT=${SENV_IMAGEROOT}
+
+if [ -n "$CRAYENV_GPU_SUPPORT" ]; then
+    export GPUARGS="--nv"
+else
+    export GPUARGS=
+fi
+
+export BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar"
+
+DEB_SCRATCH=/glade/scratch/${me}
+LOC_BINDARGS="${BINDARGS},${DEB_SCRATCH}:/tmp"
+
+ml purge
+unset MODULEPATH_ROOT
+unset MODULEPATH
+unset MODULESHOME
+unset -f module
+unset -f ml
+
+if [ $NARGS -eq 0 ] ; then
+   ${SINGULARITY} run -u ${LOC_BINDARGS} ${GPUARGS} \
+              ${SCR_IMAGEROOT} ${THESHELL}
+else
+   ${SINGULARITY} run -u ${LOC_BINDARGS} ${GPUARGS} --env-file ${STARTUPENV} \
+              ${SCR_IMAGEROOT} ${THESHELL} -c "${ALLARGS}"
+fi
+echo "Ended: $(date +'%Y-%m-%dT%H:%M:%S')" >> ${LOGFIL}
