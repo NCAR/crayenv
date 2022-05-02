@@ -1,0 +1,9 @@
+model=$(lscpu |awk '$1 == "Model" && $2 == "name:"{print $6}')
+if [ $model == "E5-2697" ] ; then
+    echo "crayenv with Spack must be run on Casper!"
+    exit 1
+fi
+
+export PATH=/usr/ncar/bin:$PATH
+
+. /glade/u/apps/crayenv/22.02/util/localinit.sh
