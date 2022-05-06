@@ -30,7 +30,7 @@ else
     export GPUARGS=
 fi
 
-export BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar,/glade/u/apps/ch/opt/hpe-cpe/22.02/nvhpc/bin:/opt/cray/pe/mpich/8.1.13/ofi/nvidia/20.7/bin"
+export BINDARGS="-B/glade,/var/spool/pbs,/var/run/munge,/glade/u/apps/opt/nvhpc/21.3:/opt/nvidia/hpc_sdk,/glade/u/apps/ch/opt/hpe-cpe/22.02/ncar:/usr/ncar,/glade/u/apps/ch/opt/hpe-cpe/22.02/nvhpc/bin:/opt/cray/pe/mpich/8.1.13/ofi/nvidia/20.7/bin,/opt/pbs,/glade/u/apps/ch/opt/hpe-cpe/22.02/etc/bash.bashrc.local:/etc/bash.bashrc.local"
 
 if [ ! -z "$PBS_JOBID" ] ; then
     export JUST_JOBID=$(echo $PBS_JOBID|awk -F\. '{print $1}')
