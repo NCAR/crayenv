@@ -2,7 +2,7 @@ if [[ -z $NCAR_CRAYENV_INIT ]]; then
     oldpwd=$(pwd)
     module purge
     export PATH=/usr/ncar/bin:$PATH
-    . /glade/u/apps/crayenv/22.02/util/localinit.sh
+    . /glade/u/apps/crayenv/default/util/localinit.sh
     cd $oldpwd
     export NCAR_CRAYENV_INIT=1
 fi
